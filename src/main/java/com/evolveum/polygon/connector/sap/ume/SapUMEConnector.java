@@ -34,7 +34,7 @@ import org.openspml.message.Filter;
 import java.util.Set;
 
 /*
- * @version 0.0.5.0-SNAPSHOT
+ * @version 1.0.0.0
  * @since   2020-02-14
  * @author  Frantisek Reznicek
  */

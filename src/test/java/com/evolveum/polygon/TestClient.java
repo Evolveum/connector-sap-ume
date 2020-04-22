@@ -20,6 +20,8 @@ import java.util.*;
 
 public class TestClient {
 
+    //uncomment as needed for testing
+    /*
     private static final Log LOG = Log.getLog(TestClient.class);
     private SapUMEConnector sapUMEConnector;
 
@@ -453,4 +455,5 @@ public class TestClient {
         suc.executeQuery(objectClass, query, handler, options);
         Assert.assertEquals(found[0], value, "In the attribute '" + key + "' expected other value - ");
     }
+     */
 }
