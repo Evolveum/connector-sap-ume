@@ -67,13 +67,15 @@ public class SapUMEUpdate extends SapUMEAbstractOperation {
             } else if (attrName.equals(SapUMESchema.ATTRIBUTE_ISLOCKED)) {
                 //cesspool - not implemented
             } else if (isDateAttribute(attrName)) {
-                Object sAttributeValue = SapUMEDateHelper.parseUmeDateValue(attr.getValue().get(0),getConfiguration());
-                if (attrName.equals(OperationalAttributes.ENABLE_DATE_NAME)) {
-                    validFromDateName = sAttributeValue;
-                } else if (attrName.equals(OperationalAttributes.DISABLE_DATE_NAME)) {
-                    validToDateName = sAttributeValue;
-                }else {
-                    modifyRequest.addModification(attrName, sAttributeValue);
+                if(attr.getValue()!=null) {
+                    Object sAttributeValue = SapUMEDateHelper.parseUmeDateValue(attr.getValue().get(0), getConfiguration());
+                    if (attrName.equals(OperationalAttributes.ENABLE_DATE_NAME)) {
+                        validFromDateName = sAttributeValue;
+                    } else if (attrName.equals(OperationalAttributes.DISABLE_DATE_NAME)) {
+                        validToDateName = sAttributeValue;
+                    } else {
+                        modifyRequest.addModification(attrName, sAttributeValue);
+                    }
                 }
             } else {
                 Object sAttributeValue = attr.getValue() == null || attr.getValue().size() == 0 ? "" : attr.getValue().get(0);
