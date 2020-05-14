@@ -145,7 +145,11 @@ public class SapUMEQuery extends SapUMEAbstractOperation {
                     abuilder.setName(attributeName);
                 }
                 if (!isBlank(value)) {
-                    abuilder.addValue(SapUMEDateHelper.convertDateToLong(SapUMEDateHelper.convertUmeStringToDate(value,getConfiguration())));
+                    try {
+                        abuilder.addValue(SapUMEDateHelper.convertDateToLong(SapUMEDateHelper.convertUmeStringToDate(value,getConfiguration())));
+                    } catch (Exception e) {
+                        LOG.error(e,"Error in build user ume time, value : "+value);
+                    }
                 }
                 objectBuilder.addAttribute(abuilder.build());
             } else if (attributeName.equals(SapUMESchema.ATTRIBUTE_ISLOCKED)) {
@@ -212,8 +216,12 @@ public class SapUMEQuery extends SapUMEAbstractOperation {
                 abuilder.setName(attributeName);
                 String value = (String) searchResult.getAttributeValue(attributeName);
                 if (!isBlank(value)) {
-                    abuilder.addValue(SapUMEDateHelper.convertDateToLong(SapUMEDateHelper.convertUmeStringToDate(value,getConfiguration())));
-                    objectBuilder.addAttribute(abuilder.build());
+                    try {
+                        abuilder.addValue(SapUMEDateHelper.convertDateToLong(SapUMEDateHelper.convertUmeStringToDate(value, getConfiguration())));
+                        objectBuilder.addAttribute(abuilder.build());
+                    } catch (Exception e) {
+                        LOG.error(e,"Error in build group ume time, value : "+value);
+                    }
                 }
             } else {
                 AttributeBuilder abuilder = new AttributeBuilder();

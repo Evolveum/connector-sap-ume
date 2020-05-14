@@ -64,7 +64,6 @@ public class SapUMEConfiguration extends AbstractConfiguration {
     private String enableValidToTime = "9999-12-31 00:00:00";
     private String disableValidFromTime = "";
     private String disableValidToTime = SapUMEDateHelper.CURRENT_VALID_TIME;
-    private String umeOffset = "";
 
     @Override
     public void validate() {
@@ -227,15 +226,6 @@ public class SapUMEConfiguration extends AbstractConfiguration {
         this.disableValidToTime = disableValidToTime;
     }
 
-    @ConfigurationProperty(order = 17, displayMessageKey = "sap.ume.config.umeOffset", helpMessageKey = "sap.ume.config.umeOffset.help")
-    public String getUmeOffset() {
-        return umeOffset;
-    }
-
-    public void setUmeOffset(String umeOffset) {
-        this.umeOffset = umeOffset;
-    }
-
     private String printPassword(GuardedString pwd) {
         if (pwd == null) {
             return "<null>";
@@ -265,7 +255,6 @@ public class SapUMEConfiguration extends AbstractConfiguration {
                 ", enableValidToTime='" + enableValidToTime + '\'' +
                 ", disableValidFromTime='" + disableValidFromTime + '\'' +
                 ", disableValidToTime='" + disableValidToTime + '\'' +
-                ", umeOffset='" + umeOffset + '\'' +
                 '}';
     }
 }

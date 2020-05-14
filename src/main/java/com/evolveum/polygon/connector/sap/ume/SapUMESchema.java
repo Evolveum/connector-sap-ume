@@ -114,7 +114,7 @@ public class SapUMESchema {
 
     private static void createSchema(SapUMEConfiguration configuration) {
 
-        LOG.info("Start create schema, schema");
+        LOG.info("Start create schema");
 
         if (schema != null) {
             return;

@@ -39,13 +39,7 @@ public class SapUMEDateHelper {
     }
 
     public static String convertDateToUmeString(Date date, SapUMEConfiguration conf) {
-        int offset = 0;
-        if(isBlank(conf.getUmeOffset())) {
-            offset = getTimeZone().getRawOffset();
-        } else {
-            int hourOffset = Integer.parseInt(conf.getUmeOffset());
-            offset = hourOffset*3600000;
-        }
+        long offset = getOffset(date);
         return umeFormat.format(new Date(date.getTime()-offset));
     }
 
@@ -74,15 +68,9 @@ public class SapUMEDateHelper {
                     throw new InvalidAttributeValueException("Error in parsing ume time : value="+ume, e);
                 }
             }
-            int offset = 0;
-            if(isBlank(conf.getUmeOffset())) {
-                offset = getTimeZone().getRawOffset();
-            } else {
-                int hourOffset = Integer.parseInt(conf.getUmeOffset());
-                offset = hourOffset*3600000;
-            }
+            long offset = getOffset(date);
             return new Date(date.getTime() + offset);
-        } catch (ParseException e) {
+        } catch (Exception e) {
             LOG.error(e,"Error in parsing ume time : value="+ume);
             throw new InvalidAttributeValueException("Error in parsing ume time : value="+ume, e);
         }
@@ -102,6 +90,10 @@ public class SapUMEDateHelper {
 
     public static TimeZone getTimeZone() {
         return TimeZone.getDefault();
+    }
+
+    public static long getOffset(Date date) {
+        return getTimeZone().getOffset(date.getTime());
     }
 
     public static String parseValidTime(String time,SapUMEConfiguration conf) {
