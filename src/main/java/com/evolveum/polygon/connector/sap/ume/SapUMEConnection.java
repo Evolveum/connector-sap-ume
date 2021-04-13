@@ -105,6 +105,7 @@ public class SapUMEConnection {
             OutputStream out = httpURLConnection.getOutputStream();
             out.write(xmlBytes);
             out.close();
+            out = null;
 
             BufferedReader in = new BufferedReader(new InputStreamReader(httpURLConnection.getInputStream()));
             String inputLine;
@@ -113,6 +114,7 @@ public class SapUMEConnection {
                 content.append(inputLine);
             }
             in.close();
+            in = null;
 
             if (content.length() == 0) {
                 response = null;
@@ -121,8 +123,8 @@ public class SapUMEConnection {
             }
             spmlResponse = SpmlResponse.parseResponse(response);
 
-
             httpURLConnection.disconnect();
+            httpURLConnection = null;
 
             logResponse(spmlResponse, logOperation);
 

@@ -104,6 +104,7 @@ public class SapUMEUpdate extends SapUMEAbstractOperation {
                 updatePassword(uidValue, passwordAttrAbleToChange);   //if I don't call this, then the password will be init password
             }
         }
+        modifyRequest = null;
         LOG.info("Update finished : {0}", backUid);
         return new Uid(backUid);
     }
@@ -176,6 +177,8 @@ public class SapUMEUpdate extends SapUMEAbstractOperation {
                 assignedList.add(s);
             }
         }
+        spmlResponse = null;
+        resp = null;
         return assignedList;
     }
 

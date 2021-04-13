@@ -34,8 +34,8 @@ import org.openspml.message.Filter;
 import java.util.Set;
 
 /*
- * @version 1.0.0.0
- * @since   2020-02-14
+ * @version 1.0.0.1
+ * @since   2021-04-12
  * @author  Frantisek Reznicek
  */
 
@@ -43,11 +43,6 @@ import java.util.Set;
 public class SapUMEConnector implements Connector, TestOp, SchemaOp, SearchOp<Filter>, UpdateOp, CreateOp, DeleteOp, PoolableConnector {
 
     private static final Log LOG = Log.getLog(SapUMEConnector.class);
-
-    private SapUMEQuery query = null;
-    private SapUMEUpdate update = null;
-    private SapUMECreate create = null;
-    private SapUMEDelete delete = null;
 
     private SapUMEConfiguration configuration;
     private SapUMEConnection connection;
@@ -62,10 +57,6 @@ public class SapUMEConnector implements Connector, TestOp, SchemaOp, SearchOp<Fi
         LOG.info("Initialization start, configuration: {0}", configuration.toString());
         this.configuration = (SapUMEConfiguration) configuration;
         this.connection = new SapUMEConnection(this.configuration);
-        this.query = new SapUMEQuery(this.configuration, this.connection);
-        this.update = new SapUMEUpdate(this.configuration, this.connection);
-        this.create = new SapUMECreate(this.configuration, this.connection);
-        this.delete = new SapUMEDelete(this.configuration, this.connection);
         LOG.info("Initialization finished");
     }
 
@@ -76,22 +67,6 @@ public class SapUMEConnector implements Connector, TestOp, SchemaOp, SearchOp<Fi
         if (connection != null) {
             connection.dispose();
             connection = null;
-        }
-        if (this.query != null) {
-            this.query.dispose();
-            this.query = null;
-        }
-        if (this.update != null) {
-            this.update.dispose();
-            this.update = null;
-        }
-        if (this.create != null) {
-            this.create.dispose();
-            this.create = null;
-        }
-        if (this.delete != null) {
-            this.delete.dispose();
-            this.delete = null;
         }
         LOG.info("Dispose finished");
     }
@@ -113,22 +88,36 @@ public class SapUMEConnector implements Connector, TestOp, SchemaOp, SearchOp<Fi
 
     @Override
     public void executeQuery(ObjectClass objectClass, Filter filter, ResultsHandler resultsHandler, OperationOptions operationOptions) {
-        this.query.executeQuery(new SapUMEObjectClass(objectClass), filter, resultsHandler, operationOptions);
+        SapUMEQuery query = new SapUMEQuery(this.configuration, this.connection);
+        query.executeQuery(new SapUMEObjectClass(objectClass), filter, resultsHandler, operationOptions);
+        query.dispose();
+        query = null;
     }
 
     @Override
     public Uid update(ObjectClass objectClass, Uid uid, Set<Attribute> set, OperationOptions operationOptions) {
-        return update.update(new SapUMEObjectClass(objectClass), uid, set);
+        SapUMEUpdate update = new SapUMEUpdate(this.configuration, this.connection);
+        Uid retUid = update.update(new SapUMEObjectClass(objectClass), uid, set);
+        update.dispose();
+        update = null;
+        return retUid;
     }
 
     @Override
     public Uid create(ObjectClass objectClass, Set<Attribute> set, OperationOptions operationOptions) {
-        return create.create(new SapUMEObjectClass(objectClass), set);
+        SapUMECreate create = new SapUMECreate(this.configuration, this.connection);
+        Uid retUid = create.create(new SapUMEObjectClass(objectClass), set);
+        create.dispose();
+        create = null;
+        return  retUid;
     }
 
     @Override
     public void delete(ObjectClass objectClass, Uid uid, OperationOptions operationOptions) {
+        SapUMEDelete delete = new SapUMEDelete(this.configuration, this.connection);
         delete.delete(new SapUMEObjectClass(objectClass), uid);
+        delete.dispose();
+        delete = null;
     }
 
     @Override

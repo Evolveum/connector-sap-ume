@@ -102,6 +102,9 @@ public class SapUMEQuery extends SapUMEAbstractOperation {
                 handler.handle(co);
             }
         }
+        spmlResponse = null;
+        resp = null;
+        searchReq = null;
         LOG.info("Execute query finished : {0}", objectClass.toString());
     }
 

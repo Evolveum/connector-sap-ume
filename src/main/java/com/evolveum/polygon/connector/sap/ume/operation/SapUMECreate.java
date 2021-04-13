@@ -116,7 +116,11 @@ public class SapUMECreate extends SapUMEAbstractOperation {
                 update = null;
 
             }
+            spmlResponse = null;
         }
+
+        addRequest = null;
+
         LOG.info("Create finished : {0}", backUid);
         return new Uid(backUid);
     }

@@ -24,6 +24,7 @@ public class SapUMEDelete extends SapUMEAbstractOperation {
         DeleteRequest delReq = new DeleteRequest();
         delReq.setIdentifier(uid.getUidValue());
         super.getConnection().connect(delReq,LOG_OPERATION_DELETE);
+        delReq = null;
         LOG.info("Delete finished : {0}:{1}", objectClass.toString(), uid.toString());
     }
 }
