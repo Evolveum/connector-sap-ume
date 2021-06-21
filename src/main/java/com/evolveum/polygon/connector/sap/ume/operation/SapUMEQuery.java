@@ -115,7 +115,7 @@ public class SapUMEQuery extends SapUMEAbstractOperation {
         while (itr.hasNext()) {
             String attributeName = itr.next();
 
-            if (isRoleAttribute(attributeName) || isGroupAttribute(attributeName)) {
+            if (isRoleAttribute(attributeName) || isGroupAttribute(attributeName) || attributeName.equals(SapUMESchema.ATTRIBUTE_CERTIFICATE)) {
                 AttributeBuilder abuilder = new AttributeBuilder();
                 abuilder.setName(attributeName);
                 if (searchResult.getAttributeValue(attributeName) != null) {

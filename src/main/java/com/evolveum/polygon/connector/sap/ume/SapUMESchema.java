@@ -182,12 +182,18 @@ public class SapUMESchema {
         accountClassBuilder.addAttributeInfo(createSimpleAttribute(ATTRIBUTE_FAX));
         accountClassBuilder.addAttributeInfo(createSimpleAttribute(ATTRIBUTE_LOCALE));
         accountClassBuilder.addAttributeInfo(createSimpleAttribute(ATTRIBUTE_TIMEZONE));
-        accountClassBuilder.addAttributeInfo(createSimpleAttribute(ATTRIBUTE_CERTIFICATE));
 
         accountClassBuilder.addAttributeInfo(createSimpleAttribute(ATTRIBUTE_ISPASSWORDDISABLED));
         accountClassBuilder.addAttributeInfo(createSimpleAttribute(ATTRIBUTE_TELEPHONE));
         accountClassBuilder.addAttributeInfo(createSimpleAttribute(ATTRIBUTE_DEPARTMENT));
         accountClassBuilder.addAttributeInfo(createSimpleAttribute(ATTRIBUTE_SECURITYPOLICY));
+
+        //accountClassBuilder.addAttributeInfo(createSimpleAttribute(ATTRIBUTE_CERTIFICATE));
+        AttributeInfoBuilder certs = new AttributeInfoBuilder(ATTRIBUTE_CERTIFICATE);
+        certs.setType(String.class);
+        certs.setUpdateable(true);
+        certs.setMultiValued(true);
+        accountClassBuilder.addAttributeInfo(certs.build());
 
         AttributeInfoBuilder roles = new AttributeInfoBuilder(ATTRIBUTE_ASSIGNEDROLES);
         roles.setType(String.class);

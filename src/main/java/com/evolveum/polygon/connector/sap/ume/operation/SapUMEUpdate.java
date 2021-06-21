@@ -35,51 +35,55 @@ public class SapUMEUpdate extends SapUMEAbstractOperation {
         while (attrsIter.hasNext()) {
             Attribute attr = attrsIter.next();
             String attrName = objectClass.assignAttribute(attr.getName());
-            if (isRoleAttribute(attrName) || isGroupAttribute(attrName) || (attrName.equals(SapUMESchema.ATTRIBUTE_MEMBER))) {
+            if (isRoleAttribute(attrName)) {
                 getListElement(modifyRequest, attr, uidValue, updateBase);
-            } else if ((attrName.equals(SapUMESchema.ATTRIBUTE_PASSWORD) || (attrName.equals(OperationalAttributes.PASSWORD_NAME)))) {
-                if (getConfiguration().getInitialPasswordAfterUpdate()) {
-                    modifyRequest.addModification(SapUMESchema.ATTRIBUTE_PASSWORD, SecurityUtil.decrypt((GuardedString) attr.getValue().get(0)));
-                } else {
-                    String dummyPassword = SecurityUtil.decrypt(getConfiguration().getDummyPassword());
-                    modifyRequest.addModification(SapUMESchema.ATTRIBUTE_PASSWORD, dummyPassword);
-                    passwordAttrAbleToChange = attr;
-                }
-            } else if (attrName.equals(OperationalAttributes.ENABLE_NAME)) {
-                String from = null;
-                String to = null;
-                if(attr.getValue()!=null && !((Boolean)attr.getValue().get(0)).booleanValue()) { //disable
-                    from = super.getConfiguration().getDisableValidFromTime();
-                    to = super.getConfiguration().getDisableValidToTime();
-                } else { //enable
-                    from = super.getConfiguration().getEnableValidFromTime();
-                    to = super.getConfiguration().getEnableValidToTime();
-                }
-                validFromName = SapUMEDateHelper.parseValidTime(from,getConfiguration());
-                validToName = SapUMEDateHelper.parseValidTime(to,getConfiguration());
-            } else if (attrName.equals(OperationalAttributes.LOCK_OUT_NAME)) {
-                Boolean locked = Boolean.FALSE;
-                if(attr.getValue()!=null) {
-                    locked = Boolean.valueOf((boolean)attr.getValue().get(0));
-                }
-                modifyRequest.addModification(SapUMESchema.ATTRIBUTE_ISLOCKED, locked);
-
-            } else if (attrName.equals(SapUMESchema.ATTRIBUTE_ISLOCKED)) {
-                //cesspool - not implemented
-            } else if (isDateAttribute(attrName)) {
-                if(attr.getValue()!=null) {
-                    Object sAttributeValue = SapUMEDateHelper.parseUmeDateValue(attr.getValue().get(0), getConfiguration());
-                    if (attrName.equals(OperationalAttributes.ENABLE_DATE_NAME)) {
-                        validFromDateName = sAttributeValue;
-                    } else if (attrName.equals(OperationalAttributes.DISABLE_DATE_NAME)) {
-                        validToDateName = sAttributeValue;
-                    } else {
-                        modifyRequest.addModification(attrName, sAttributeValue);
-                    }
-                }
+            } else if (isGroupAttribute(attrName) || attrName.equals(SapUMESchema.ATTRIBUTE_MEMBER) || attrName.equals(SapUMESchema.ATTRIBUTE_CERTIFICATE)) {
+                getListElement(modifyRequest, attr, uidValue, updateBase);
             } else {
-                Object sAttributeValue = attr.getValue() == null || attr.getValue().size() == 0 ? "" : attr.getValue().get(0);
-                modifyRequest.addModification(attrName, sAttributeValue.toString());
+                if ((attrName.equals(SapUMESchema.ATTRIBUTE_PASSWORD) || (attrName.equals(OperationalAttributes.PASSWORD_NAME)))) {
+                    if (getConfiguration().getInitialPasswordAfterUpdate()) {
+                        modifyRequest.addModification(SapUMESchema.ATTRIBUTE_PASSWORD, SecurityUtil.decrypt((GuardedString) attr.getValue().get(0)));
+                    } else {
+                        String dummyPassword = SecurityUtil.decrypt(getConfiguration().getDummyPassword());
+                        modifyRequest.addModification(SapUMESchema.ATTRIBUTE_PASSWORD, dummyPassword);
+                        passwordAttrAbleToChange = attr;
+                    }
+                } else if (attrName.equals(OperationalAttributes.ENABLE_NAME)) {
+                    String from = null;
+                    String to = null;
+                    if (attr.getValue() != null && !((Boolean) attr.getValue().get(0)).booleanValue()) { //disable
+                        from = super.getConfiguration().getDisableValidFromTime();
+                        to = super.getConfiguration().getDisableValidToTime();
+                    } else { //enable
+                        from = super.getConfiguration().getEnableValidFromTime();
+                        to = super.getConfiguration().getEnableValidToTime();
+                    }
+                    validFromName = SapUMEDateHelper.parseValidTime(from, getConfiguration());
+                    validToName = SapUMEDateHelper.parseValidTime(to, getConfiguration());
+                } else if (attrName.equals(OperationalAttributes.LOCK_OUT_NAME)) {
+                    Boolean locked = Boolean.FALSE;
+                    if (attr.getValue() != null) {
+                        locked = Boolean.valueOf((boolean) attr.getValue().get(0));
+                    }
+                    modifyRequest.addModification(SapUMESchema.ATTRIBUTE_ISLOCKED, locked);
+
+                } else if (attrName.equals(SapUMESchema.ATTRIBUTE_ISLOCKED)) {
+                    //cesspool - not implemented
+                } else if (isDateAttribute(attrName)) {
+                    if (attr.getValue() != null) {
+                        Object sAttributeValue = SapUMEDateHelper.parseUmeDateValue(attr.getValue().get(0), getConfiguration());
+                        if (attrName.equals(OperationalAttributes.ENABLE_DATE_NAME)) {
+                            validFromDateName = sAttributeValue;
+                        } else if (attrName.equals(OperationalAttributes.DISABLE_DATE_NAME)) {
+                            validToDateName = sAttributeValue;
+                        } else {
+                            modifyRequest.addModification(attrName, sAttributeValue);
+                        }
+                    }
+                } else {
+                    Object sAttributeValue = attr.getValue() == null || attr.getValue().size() == 0 ? "" : attr.getValue().get(0);
+                    modifyRequest.addModification(attrName, sAttributeValue.toString());
+                }
             }
         }
 
