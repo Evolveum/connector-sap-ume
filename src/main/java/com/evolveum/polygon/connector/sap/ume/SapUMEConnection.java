@@ -27,6 +27,7 @@ import org.openspml.util.SpmlException;
 
 import java.io.*;
 import java.net.*;
+import java.util.Base64;
 import java.util.Iterator;
 
 import static org.identityconnectors.common.StringUtil.isBlank;
@@ -43,7 +44,9 @@ public class SapUMEConnection {
     }
 
     public void dispose() {
+        LOG.info("Dispose start");
         this.configuration = null;
+        LOG.info("Dispose finished");
     }
 
     public SpmlResponse connect(SpmlRequest spmlRequest, String logOperation) {
@@ -81,7 +84,8 @@ public class SapUMEConnection {
             URL url = new URL(ur1);
             httpURLConnection = (HttpURLConnection) url.openConnection();
 
-            Authenticator.setDefault(new SapUMEAuthenticator(this.configuration.getUser(), this.configuration.getPassword()));
+            String basicAuth = "Basic " + new String(Base64.getEncoder().encode((this.configuration.getUser() + ":" + SecurityUtil.decrypt(this.configuration.getPassword())).getBytes()));
+            httpURLConnection.setRequestProperty ("Authorization", basicAuth);
 
             byte[] xmlBytes = sSOAPRequest.getBytes();
             httpURLConnection.setRequestProperty("Content-Length", String.valueOf(xmlBytes.length));
@@ -160,6 +164,7 @@ public class SapUMEConnection {
         } catch (Exception exception) {
             throw new ConnectorException(exception);
         }
+
         LOG.info("Connect finished");
         return spmlResponse;
     }
@@ -171,28 +176,14 @@ public class SapUMEConnection {
         try {
             SpmlResponse response = connect(sr, SapUMEAbstractOperation.LOG_OPERATION_TEST);
             LOG.info("Backend ume schema: {0}", response.toXml());
+            response = null;
         } catch (Exception exception) {
             LOG.error("Exception in connection : {0}", exception.getMessage());
             throw new ConnectionFailedException(exception);
         }
+        sr = null;
         LOG.info("Test finished");
     }
-
-    private class SapUMEAuthenticator extends Authenticator {
-        private String user;
-        private GuardedString password;
-
-        public SapUMEAuthenticator(String user, GuardedString password) {
-            this.user = user;
-            this.password = password;
-        }
-
-        public PasswordAuthentication getPasswordAuthentication() {
-            return new PasswordAuthentication(this.user, SecurityUtil.decrypt(this.password).toCharArray());
-        }
-    }
-
-    ;
 
     public void logRequest(SpmlRequest request, String logOperation) {
         SpmlRequest logRequest = null;

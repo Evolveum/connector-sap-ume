@@ -28,7 +28,7 @@
 
     <groupId>com.evolveum.polygon</groupId>
     <artifactId>connector-sap-ume</artifactId>
-    <version>1.0.0.2</version>
+    <version>1.0.0.3</version>
     <packaging>jar</packaging>
 
     <name>SapUME</name>
@@ -76,12 +76,22 @@
         </plugins>
     </build>
 
+
     <dependencies>
-         <dependency>
-             <groupId>org.openspml</groupId>
-             <artifactId>openspml</artifactId>
-             <version>0.5</version>
-         </dependency>
+    <!--
+        <dependency>
+            <groupId>org.openspml</groupId>
+            <artifactId>openspml</artifactId>
+            <version>0.5</version>
+        </dependency>
+     -->
+        <dependency>
+            <groupId>org.openspml</groupId>
+            <artifactId>openspml</artifactId>
+            <version>1.0</version>
+            <scope>system</scope>
+            <systemPath>${project.basedir}/lib/openspml1-toolkit.jar</systemPath>
+        </dependency>
     </dependencies>
 
 </project>

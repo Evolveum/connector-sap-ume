@@ -34,8 +34,8 @@ import org.openspml.message.Filter;
 import java.util.Set;
 
 /*
- * @version 1.0.0.2
- * @since   2021-06-15
+ * @version 1.0.0.3
+ * @since   2022-01-24
  * @author  Frantisek Reznicek
  */
 
@@ -63,10 +63,10 @@ public class SapUMEConnector implements Connector, TestOp, SchemaOp, SearchOp<Fi
     @Override
     public void dispose() {
         LOG.info("Dispose start");
-        configuration = null;
-        if (connection != null) {
-            connection.dispose();
-            connection = null;
+        this.configuration = null;
+        if (this.connection != null) {
+            this.connection.dispose();
+            this.connection = null;
         }
         LOG.info("Dispose finished");
     }
@@ -125,5 +125,6 @@ public class SapUMEConnector implements Connector, TestOp, SchemaOp, SearchOp<Fi
         if (this.connection == null) {
             throw new ConnectionFailedException("Connection check failed (connection is null), connection was not initialized");
         }
+        connection.test();
     }
 }
