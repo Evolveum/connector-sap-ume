@@ -56,7 +56,9 @@ public class SapUMEConnector implements Connector, TestOp, SchemaOp, SearchOp<Fi
     public void init(Configuration configuration) {
         LOG.info("Initialization start, configuration: {0}", configuration.toString());
         this.configuration = (SapUMEConfiguration) configuration;
+        this.configuration.validate();
         this.connection = new SapUMEConnection(this.configuration);
+        schema();
         LOG.info("Initialization finished");
     }
 
