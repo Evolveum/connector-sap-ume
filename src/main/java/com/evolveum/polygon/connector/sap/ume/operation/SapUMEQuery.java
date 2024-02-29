@@ -162,10 +162,10 @@ public class SapUMEQuery extends SapUMEAbstractOperation {
                 Boolean locked = Boolean.parseBoolean((String)value);
                 abuilder1.addValue(locked);
                 objectBuilder.addAttribute(abuilder1.build());
-                AttributeBuilder abuilder2 = new AttributeBuilder();
-                abuilder2.setName(attributeName);
-                abuilder2.addValue(value);
-                objectBuilder.addAttribute(abuilder2.build());
+//                AttributeBuilder abuilder2 = new AttributeBuilder();
+//                abuilder2.setName(attributeName);
+//                abuilder2.addValue(value);
+//                objectBuilder.addAttribute(abuilder2.build());
             } else {
                 AttributeBuilder abuilder = new AttributeBuilder();
                 abuilder.setName(attributeName);

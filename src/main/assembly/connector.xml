@@ -32,6 +32,13 @@
             <directory>target/classes</directory>
             <outputDirectory></outputDirectory>
         </fileSet>
+        <fileSet>
+            <directory>${project.basedir}/lib</directory>
+            <includes>
+                <include>openspml1-toolkit.jar</include>
+            </includes>
+            <outputDirectory>lib</outputDirectory>
+        </fileSet>
     </fileSets>
 
     <dependencySets>
